@@ -148,12 +148,12 @@ wss.on("close", () => {
     console.log("веб сокет сервер закрыт");
 });
 
-const mes = {
-    event: "connet to room / sendMessage / auth / createRoom / leaveRoom",
-    data: "room name / {name, id, text} / name / roomName / {}"
-};
+//  incomMes = {
+//     event: "connet to room / sendMessage / auth / createRoom / leaveRoom",
+//     data: "room name / {name, id, text} / name / roomName / {}"
+// };
 
-const res = {
-    event: "rooms / joined  / members / authSuc",
-    data: "['', ''] / {name, id, text} / ['', ''] / - /"
-}
+//  outgoingMes = {
+//     event: "rooms / joined  / members / authSuc",
+//     data: "['', ''] / {name, id, text} / ['', ''] / - /"
+// }
