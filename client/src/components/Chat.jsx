@@ -1,60 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
-import s from "./Chat.module.css"
+import React, { useState } from 'react'
+// import s from "./Chat.module.css"
+import Auth from './Auth';
+import Rooms from './Rooms';
+import CreateRoom from './CreateRoom';
+import ChatInfo from './ChatInfo';
+import Messages from './Messages';
+import Leave from './Leave';
+import useWSChat from '../hooks/useWSChat';
 
 export default function Chat() {
-    const websock = useRef();
-    const [isAuth, setIsAuth] = useState(false);
     const [name, setName] = useState("");
-    const [rooms, setRooms] = useState();
     const [curRoom, setCurRoom] = useState();
-    const [messages, setMessages] = useState([]);
-    const [text, setText] = useState("");
-    const [roomName, setRoomName] = useState("");
-    const [members, setMembers] = useState([]);
+    
+    const {
+        websock, 
+        rooms, 
+        isAuth, 
+        members, 
+        messages, setMessages
+    } = useWSChat();
 
-    useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8080");
-
-        websock.current = ws;
-
-        ws.addEventListener("open", (e) => {
-
-        });
-
-        ws.addEventListener("message", (e) => {
-            const mes = JSON.parse(e.data);
-
-            switch (mes.event) {
-                case "rooms":
-                    setRooms(mes.data);
-                break;
-                case "authSuc":
-                    setIsAuth(mes.data);
-                    console.log(mes.data);
-                break;
-                case "joined":
-                    console.log(mes.data);
-                    setMessages(prev => [mes.data, ...prev]);
-                break;
-                case "sendMes":
-                    console.log(mes.data);
-                    setMessages(prev => [mes.data, ...prev]);
-                break;
-                case "members":
-                    setMembers(mes.data);
-                break;
-                default:
-                    console.log("неизвестное сообщение");
-                break;
-            }
-        });
-
-        ws.onerror = function(e) {
-            alert("ошибка", e);
-        }
-    }, []);
-
-    function onAuth(e) {
+    function onAuth(name) {
         const mes = {
             event: "auth",
             data: name
@@ -74,7 +40,7 @@ export default function Chat() {
         setCurRoom(room);
     }
 
-    function sendMes(e) {
+    function sendMes(text) {
         const mes = {
             event: "sendMes",
             data: {
@@ -85,11 +51,9 @@ export default function Chat() {
         };
 
         websock.current.send(JSON.stringify(mes));
-
-        setText("");
     }
 
-    function createRoom(e) {
+    function createRoom(roomName) {
         const mes = {
             event: "createRoom",
             data: roomName
@@ -100,7 +64,6 @@ export default function Chat() {
         websock.current.send(JSON.stringify(mes));
 
         setCurRoom(roomName);
-        setRoomName("");
     }
 
     function leaveRoom(e) {
@@ -115,59 +78,21 @@ export default function Chat() {
     }
 
     if (!isAuth) return (
-        <div>
-            <input onInput={(e) => setName(e.target.value)} value={name} type="text" placeholder='Введите свое имя' />
-            <button onClick={onAuth} type='button'>Авторизоваться</button>
-        </div>
+        <Auth onAuth={onAuth} changeName={(name) => {setName(name)}}/>
     );
 
     return (
         <div>
-            <ul>
-            { !curRoom &&
-                <li>
-                    <input value={roomName} onInput={(e) => setRoomName(e.target.value)} type="text" placeholder='' />
-                    <button type='button' onClick={createRoom}>Создать комнату</button>
-                </li>
-            }
-            { rooms && !curRoom &&
-                rooms.map(room => 
-                    <li key={room}>
-                        <button type='button' onClick={(e) => chooseRoom(room)}>
-                            {room}
-                        </button>
-                    </li>    
-                )
-            }
-            </ul>
+            <Rooms rooms={rooms} curRoom={curRoom} chooseRoom={chooseRoom}>
+                <CreateRoom curRoom={curRoom} createRoom={createRoom} />
+            </Rooms>
             <div>
             { curRoom && 
                 <div>
                     <h3>{curRoom}</h3>
-                    <div>
-                        <button type='button' onClick={leaveRoom}>Выйти</button>
-                    </div>
-                    <div>
-                        Участники:
-                        <ul>
-                            {
-                                members.map(member => 
-                                    <li key={member}>{member}</li>
-                                )
-                            }    
-                        </ul>
-                    </div>
-                    <div>
-                        <input type="text" value={text} onInput={(e) => setText(e.target.value)} />
-                        <button onClick={sendMes} type='button'>Отправить</button>
-                    </div>
-                    <ul>
-                        {
-                            messages.map((ms) => 
-                                <li key={ms.id}>{ms.name}:{ms.text}</li>
-                            )
-                        }
-                    </ul>
+                    <Leave leaveRoom={leaveRoom} />
+                    <ChatInfo members={members} />
+                    <Messages messages={messages} sendMes={sendMes} />
                 </div>
             }
             </div>
