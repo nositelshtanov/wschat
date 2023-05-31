@@ -1,0 +1,30 @@
+.rooms_list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 7px;
+}
+
+.room_item {
+
+}
+
+.rooms_container {
+    padding: 10px;
+}
+
+.room_btn {
+    display: block;
+    height: 25px;
+    padding: 0 5px;
+    border: 2px solid burlywood;
+    border-radius: 3px;
+    background: bisque;
+    color: brown;
+    cursor: pointer;
+}
+
+
+.rooms_list_h2 {
+    margin-bottom: 10px;
+    color: brown;
+}

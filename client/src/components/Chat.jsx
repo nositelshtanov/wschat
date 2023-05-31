@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import s from "./Chat.module.css"
+import s from "./Chat.module.css"
 import Auth from './Auth';
 import Rooms from './Rooms';
 import CreateRoom from './CreateRoom';
@@ -82,15 +82,17 @@ export default function Chat() {
     );
 
     return (
-        <div>
+        <div className={s.chat_container}>
             <Rooms rooms={rooms} curRoom={curRoom} chooseRoom={chooseRoom}>
                 <CreateRoom curRoom={curRoom} createRoom={createRoom} />
             </Rooms>
-            <div>
+            <div >
             { curRoom && 
-                <div>
-                    <h3>{curRoom}</h3>
-                    <Leave leaveRoom={leaveRoom} />
+                <div className={s.cur_room_chat}>
+                    <h3 className={s.cur_room_h3}>Комната: {curRoom}</h3>
+                    <div className={s.leaveBtn}>
+                        <Leave leaveRoom={leaveRoom} /> 
+                    </div>
                     <ChatInfo members={members} />
                     <Messages messages={messages} sendMes={sendMes} />
                 </div>

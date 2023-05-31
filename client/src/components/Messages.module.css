@@ -1,0 +1,58 @@
+.messages_container {
+
+}
+
+.send_from {
+    display: flex;
+    column-gap: 5px;
+}
+
+.message_input {
+    display: block;
+    height: 25px;
+    width: 180px;
+    border-radius: 5px;
+    border: 2px solid burlywood;
+    text-indent: 5px;
+    color: brown;
+}
+
+.message_input:focus {
+    outline: none;
+}
+
+.message_send {
+    display: block;
+    height: 25px;
+    width: 90px;
+    border: 2px solid burlywood;
+    border-radius: 5px;
+    background: bisque;
+    color: brown;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    row-gap: 7px;
+    border: 2px solid burlywood;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.message {
+    background: bisque;
+    color: brown;
+    font-size: 1.4rem;
+    padding: 5px;
+    border-radius: 6px;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.text {
+
+}

@@ -1,0 +1,21 @@
+.info_container {
+
+}
+
+.info_h3 {
+    font-size: 2rem;
+    color: brown;
+}
+
+.info_ul {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    row-gap: 5px;
+}
+
+.info_li {
+    text-decoration: underline;
+    font-size: 1.5rem;
+    color: burlywood;
+}
